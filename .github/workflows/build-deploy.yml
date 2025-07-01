@@ -47,6 +47,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Create test database
+        run: |
+          sudo apt-get install -y postgresql-client
+          PGPASSWORD=${{ secrets.DATABASE_PASSWORD }} psql -h localhost -U ${{ secrets.DATABASE_USERNAME }} -p 5432 -c "CREATE DATABASE ${{ secrets.DATABASE_NAME }};"
+  
+
       - name:  Run Pytest
         run: |
           pip install pytest
