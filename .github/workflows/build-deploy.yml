@@ -3,7 +3,7 @@ name: CI Build and Deploy Code
 on: [push, pull_request]
 
 jobs:
-  job1:
+  ci-test-and-deploy:
     runs-on: ubuntu-latest
     environment:
       name: ci-dev
@@ -24,11 +24,12 @@ jobs:
           --health-retries 5
 
     env:
+      ENV: test
       DATABASE_HOSTNAME: localhost
       DATABASE_PORT: 5432
       DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
       DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-      DATABASE_NAME: ${{ secrets.TEST_DATABASE_NAME }}  
+      DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
       TEST_DATABASE_NAME: ${{ secrets.TEST_DATABASE_NAME }}
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       ALGORITHM: ${{ secrets.ALGORITHM }}
@@ -43,12 +44,18 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Upgrade pip and install requirements
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Create test database (if not exists)
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          until pg_isready -h localhost -p 5432; do
+            echo "Waiting for postgres..."; sleep 2;
+          done
+
+      - name: Create test database if it doesn't exist
         run: |
           sudo apt-get install -y postgresql-client
           DB_EXISTS=$(PGPASSWORD=${{ secrets.DATABASE_PASSWORD }} psql -h localhost -U ${{ secrets.DATABASE_USERNAME }} -tAc "SELECT 1 FROM pg_database WHERE datname='${{ secrets.TEST_DATABASE_NAME }}'")
@@ -56,17 +63,10 @@ jobs:
             echo "Creating test database..."
             PGPASSWORD=${{ secrets.DATABASE_PASSWORD }} psql -h localhost -U ${{ secrets.DATABASE_USERNAME }} -c "CREATE DATABASE ${{ secrets.TEST_DATABASE_NAME }};"
           else
-            echo "Test database already exists. Skipping creation."
+            echo "Test database already exists."
           fi
 
-      - name: Wait for Postgres to be ready
-        run: |
-          until pg_isready -h localhost -p 5432; do
-            echo "Waiting for postgres...";
-            sleep 2;
-          done
-
-      - name: Run Pytest
+      - name: Run tests
         run: |
           pip install pytest
           export PYTHONPATH="$PWD"
@@ -94,3 +94,5 @@ jobs:
 
       - name: Print Docker Image Digest
         run: echo ${{ steps.docker_build.outputs.digest }}
+
+     
