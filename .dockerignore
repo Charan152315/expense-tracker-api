@@ -1,0 +1,33 @@
+# Bytecode
+__pycache__/
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Git
+.git
+.gitignore
+
+alembic.ini
+README.md
+
+# Docker
+Dockerfile
+docker-compose.dev.yml
+docker-compose.prod.yml
+
+# IDE/editor settings
+.vscode/
+
+# Environment variables
+.env
+.env.prod
+
+# Pytest cache
+.pytest_cache/
+tests/
+
+
+
