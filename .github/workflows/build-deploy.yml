@@ -59,6 +59,13 @@ jobs:
             echo "Test database already exists. Skipping creation."
           fi
 
+      - name: Wait for Postgres to be ready
+        run: |
+          until pg_isready -h localhost -p 5432; do
+            echo "Waiting for postgres...";
+            sleep 2;
+          done
+
       - name: Run Pytest
         run: |
           pip install pytest
