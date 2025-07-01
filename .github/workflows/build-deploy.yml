@@ -50,6 +50,7 @@ jobs:
       - name:  Run Pytest
         run: |
           pip install pytest
+          export PYTHONPATH="$PWD"
           pytest
 
       - name:  Login to Docker Hub
