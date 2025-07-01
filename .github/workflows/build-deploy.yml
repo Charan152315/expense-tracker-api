@@ -29,6 +29,7 @@ jobs:
       DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
       DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
       DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+      TEST_DATABASE_NAME: ${{ secrets.TEST_DATABASE_NAME }}
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       ALGORITHM: ${{ secrets.ALGORITHM }}
       ACCESS_TOKEN_EXPIRE_MINUTES: ${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}
@@ -50,11 +51,12 @@ jobs:
       - name: Create test database (if not exists)
         run : |
           sudo apt-get install -y postgresql-client
-          DB_EXISTS=$(PGPASSWORD=${{ secrets.DATABASE_PASSWORD }} psql -h localhost -U ${{ secrets.DATABASE_USERNAME }} -tAc "SELECT 1 FROM pg_database WHERE datname='${{ secrets.DATABASE_NAME }}'")
+          DB_EXISTS=$(PGPASSWORD=${{ secrets.DATABASE_PASSWORD }} psql -h localhost -U ${{ secrets.DATABASE_USERNAME }} -tAc "SELECT 1 FROM pg_database WHERE datname='${{ secrets.TEST_DATABASE_NAME }}'")
           if [ "$DB_EXISTS" != "1" ]; then
-           PGPASSWORD=${{ secrets.DATABASE_PASSWORD }} psql -h localhost -U ${{ secrets.DATABASE_USERNAME }} -p 5432 -c "CREATE DATABASE ${{ secrets.DATABASE_NAME }};"
+            echo "Creating test database..."
+            PGPASSWORD=${{ secrets.DATABASE_PASSWORD }} psql -h localhost -U ${{ secrets.DATABASE_USERNAME }} -p 5432 -c "CREATE DATABASE ${{ secrets.TEST_DATABASE_NAME }};"
           else
-           echo "Database already exists, skipping creation."
+            echo "Test database already exists. Skipping creation."
           fi
 
 
