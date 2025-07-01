@@ -4,7 +4,7 @@ from app import models
 from app.models import Base
 from app.routes import auth,expense_routes,user_routes,group_routes
 
-Base.metadata.create_all(bind=engine)
+#Base.metadata.create_all(bind=engine)
 
 app=FastAPI(title="Expense Tracker API", version="1.0.0")
 app.include_router(auth.router)
