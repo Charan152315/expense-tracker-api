@@ -12,7 +12,7 @@ import pytest
 from datetime import datetime
 from alembic import command
 
-DATABASE_URL=f"postgresql://{settings.database_username}:{settings.database_password}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}_test"
+DATABASE_URL=f"postgresql://{settings.database_username}:{settings.database_password}@{settings.database_hostname}:{settings.database_port}/{settings.test_database_name}"
 
 engine=create_engine(DATABASE_URL)
 TestingSessionLocal=sessionmaker(autocommit=False,autoflush=False,bind=engine)
