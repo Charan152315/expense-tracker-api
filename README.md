@@ -1,6 +1,6 @@
 # 💰 Expense Tracker API - FastAPI + PostgreSQL + Docker
 
-This is a fully functional backend Expense Tracker API built using **FastAPI**, **PostgreSQL**, **SQLAlchemy**, and **JWT Authentication**. The project is production-ready, containerized with **Docker**, and includes environment-based configurations for seamless deployment.
+This is a fully functional backend **Expense Tracker API** built using **FastAPI**, **PostgreSQL**, **SQLAlchemy**, and **JWT Authentication**. The project is production-ready, containerized with **Docker**, tested using **Pytest**, and deployed on both **Render** and **AWS EC2**.
 
 ---
 
@@ -12,8 +12,9 @@ This is a fully functional backend Expense Tracker API built using **FastAPI**, 
 - 👥 Group creation and group-based expense tracking
 - 🛠️ Dockerized setup for development and production
 - 📦 PostgreSQL as the database
-- 📁 Modular code structure (routes, schemas, models, utils)
-- ✅ Tested using Postman and Pytest
+- 🧪 Tested using Pytest and Postman
+- ☁️ Live deployment on AWS EC2 and Render
+- 🔐 Environment-based secure configuration
 
 ---
 
@@ -21,9 +22,9 @@ This is a fully functional backend Expense Tracker API built using **FastAPI**, 
 
 app/
 ├── main.py
-├── models/
+├── models.py
 ├── routes/
-├── schemas/
+├── schemas.py
 ├── database.py
 ├── auth.py
 ├── config.py
@@ -31,7 +32,10 @@ app/
 .env.prod
 Dockerfile
 docker-compose-prod.yml
+docker-compose-dev.yml
 init/init.sql
+
+
 
 ---
 
@@ -43,7 +47,8 @@ init/init.sql
 - [Alembic](w)
 - [Docker](w)
 - [Pytest](w)
-- [Render](w) (for deployment)
+- [Render](w) – Deployment
+- [AWS EC2](w) + [S3](w) – Deployment
 - [pgAdmin](w)
 
 ---
@@ -61,6 +66,9 @@ init/init.sql
 🔐 Login
 POST /login
 
+json
+Copy
+Edit
 {
   "email": "charan@example.com",
   "password": "test1234"
@@ -68,6 +76,9 @@ POST /login
 💸 Create Expense
 POST /expenses/
 
+json
+Copy
+Edit
 {
   "title": "Groceries",
   "amount": 1200,
@@ -75,45 +86,52 @@ POST /expenses/
   "category": "Food"
 }
 📊 View Summary
-GET /summary/ (Requires JWT token)
+GET /summary/ (Requires JWT Token)
 
 🐳 Docker Setup (Production)
-
-# Build and run containers
+Build and run containers
+bash
+Copy
+Edit
 docker-compose -f docker-compose-prod.yml up --build
-
-# Stop and remove containers
+Stop and remove containers
+bash
+Copy
+Edit
 docker-compose -f docker-compose-prod.yml down -v
-🛠️ Deployment (Render)
-Live Link: Coming soon ✅
-
-Connected with PostgreSQL + GitHub
-
-Environment variables securely set
-
 📄 .env.prod Format
 env
-Copy code
+Copy
+Edit
 DATABASE_HOSTNAME=postgres
 DATABASE_PORT=5432
-DATABASE_NAME=fastapi
+DATABASE_NAME=your_db_name
 DATABASE_USERNAME=postgres
 DATABASE_PASSWORD=your_db_password
 SECRET_KEY=your-secret-key
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
+TEST_DATABASE_NAME=your_test_db_name
+
+
+☁️ Deployment
+✅ Render: https://expense-tracker-api-ksno.onrender.com
+
+✅ AWS EC2: http://13.61.195.207
+
+🔗 Useful Links
+📂 GitHub Repository: expense-tracker-api (https://github.com/Charan152315/expense-tracker-api.git)
+
+💼 LinkedIn: Charansri Chintamaneni (https://www.linkedin.com/in/Charansri-chintamaneni))
 
 ✍️ Author
 Charan Sri
+Student @ NIT Raipur
+Aspiring Backend + DevOps Engineer
 
-Student @ NIT Raipur, aspiring Backend + DevOps Engineer
+⭐ Show Some Love
+If you found this project helpful, please ⭐ the repo and share it with others!
 
-LinkedIn
-
-GitHub
-
-⭐️ Show Some Love
-If you liked this project, please ⭐️ the repo and share with your friends!
 
 ---
 
