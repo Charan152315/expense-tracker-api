@@ -9,22 +9,32 @@ router=APIRouter(
     tags=["Users"]
 )
 
-@router.post("/",status_code=status.HTTP_201_CREATED,response_model=schemas.UserOut)
-def create_user(user:schemas.UserCreate, db:Session=Depends(get_db)):
-    
-    existing_user=db.query(models.User).filter(models.User.email==user.email).first()
-    if existing_user:
-        raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,detail="Email was already registered")
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.UserOut)
+def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+    try:
+        print("Received user data:", user.dict())
 
-    hashed_password = utils.hash_password(user.password)
-    user.password = hashed_password
+        existing_user = db.query(models.User).filter(models.User.email == user.email).first()
+        if existing_user:
+            raise HTTPException(
+                status_code=status.HTTP_406_NOT_ACCEPTABLE,
+                detail="Email was already registered"
+            )
 
-    new_user = models.User(**user.dict())
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
+        hashed_password = utils.hash_password(user.password)
+        user.password = hashed_password
 
-    return new_user
+        new_user = models.User(**user.dict())
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
+
+        print("New user created successfully:", new_user.email)
+        return new_user
+
+    except Exception as e:
+        print("Error in /users/ route:", str(e))  # Debug line
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
 @router.get("/",response_model=list[schemas.UserOut])
 def get_all_users(db: Session = Depends(get_db),
