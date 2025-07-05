@@ -3,6 +3,7 @@ from passlib.context import CryptContext
 from .. import models,schemas,utils,database,auth
 from sqlalchemy.orm import Session 
 from .. database import get_db
+import traceback
 
 router=APIRouter(
     prefix="/users",
@@ -11,8 +12,8 @@ router=APIRouter(
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.UserOut)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    print("Received user data:", user.dict())
     try:
+        print("Received user data:", user.dict())
         existing_user = db.query(models.User).filter(models.User.email == user.email).first()
         if existing_user:
             raise HTTPException(
@@ -27,16 +28,15 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
-
-        print("New user created successfully:", new_user.email)
+        print(f"New user created successfully: {user.email}")
         return new_user
 
+    except HTTPException as http_exc:
+        raise http_exc  
     except Exception as e:
-        import traceback
-        print(" Error in /users/ route:", str(e))
+        print("Unexpected error:", str(e))
         traceback.print_exc()
         raise HTTPException(status_code=500, detail="Internal Server Error")
-
 
 @router.get("/",response_model=list[schemas.UserOut])
 def get_all_users(db: Session = Depends(get_db),
