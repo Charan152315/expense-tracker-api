@@ -14,7 +14,8 @@ class UserOut(BaseModel):
     monthly_limit:float
 
     class Config:
-        orm_mode=True
+        from_attributes = True
+        
 
 class ExpenseBase(BaseModel):
     title:str
@@ -31,7 +32,7 @@ class ExpenseOut(ExpenseBase):
     created_at:datetime
 
     class Config:
-        orm_mode=True
+        from_attributes = True
 
 class Token(BaseModel):
     access_token:str
@@ -52,5 +53,5 @@ class GroupOut(BaseModel):
     owner_id:int
     created_at:datetime
     class Config:
-        orm_mode=True           
+        from_attributes = True         
         
