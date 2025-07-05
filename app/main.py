@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from app.database import engine
 from app import models
 from app.models import Base
+import subprocess
+subprocess.run(["alembic", "upgrade", "head"]) 
 from app.routes import auth,expense_routes,user_routes,group_routes
 
 #Base.metadata.create_all(bind=engine)
