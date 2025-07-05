@@ -10,7 +10,6 @@ env/
 .git
 .gitignore
 
-alembic.ini
 README.md
 
 # Docker
