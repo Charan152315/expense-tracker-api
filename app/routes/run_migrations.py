@@ -1,15 +1,17 @@
 from fastapi import APIRouter
 from alembic.config import Config
 from alembic import command
+import os
 
 router = APIRouter()
 
 @router.get("/run-migrations")
 def run_migrations():
     try:
-        # Use relative path — works on both Render and local
-        alembic_cfg = Config("alembic.ini")
+        alembic_ini_path = os.path.abspath("alembic.ini")
+        alembic_cfg = Config(alembic_ini_path)
         command.upgrade(alembic_cfg, "head")
         return {"message": "Migrations applied successfully!"}
     except Exception as e:
         return {"error": str(e)}
+
