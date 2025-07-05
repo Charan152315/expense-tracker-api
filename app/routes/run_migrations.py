@@ -1,5 +1,5 @@
 import os
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from alembic.config import Config
 from alembic import command
 
@@ -8,7 +8,8 @@ router = APIRouter()
 @router.get("/run-migrations")
 def run_migrations():
     try:
-        base_path = os.getcwd()
+        
+        base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
         alembic_ini = os.path.join(base_path, "alembic.ini")
         alembic_script_location = os.path.join(base_path, "alembic")
 
