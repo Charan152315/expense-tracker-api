@@ -32,10 +32,13 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
         print("New user created successfully:", new_user.email)
         return new_user
 
+    except HTTPException as he:
+        raise he
     except Exception as e:
-        print("Error in /users/ route:", str(e))  # Debug line
+        print("Error in /users/ route:", str(e))
         raise HTTPException(status_code=500, detail="Internal Server Error")
-
+    
+    
 @router.get("/",response_model=list[schemas.UserOut])
 def get_all_users(db: Session = Depends(get_db),
                   current_user: models.User = Depends(auth.get_current_user)):
