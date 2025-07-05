@@ -8,10 +8,13 @@ router = APIRouter()
 @router.get("/run-migrations")
 def run_migrations():
     try:
-        # Force the absolute path to both alembic.ini and alembic folder
         base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
         alembic_ini = os.path.join(base_path, "alembic.ini")
         alembic_script_location = os.path.join(base_path, "alembic")
+
+        print("alembic_ini =", alembic_ini)
+        print("alembic_script_location =", alembic_script_location)
+        print("os.getcwd() =", os.getcwd())
 
         alembic_cfg = Config(alembic_ini)
         alembic_cfg.set_main_option("script_location", alembic_script_location)
