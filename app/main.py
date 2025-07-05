@@ -13,7 +13,7 @@ app.include_router(expense_routes.router)
 app.include_router(user_routes.router)
 app.include_router(group_routes.router)
 app.include_router(run_migrations.router)
-app.include_router(dev_routes.router)
+
 
 
 @app.get("/")
