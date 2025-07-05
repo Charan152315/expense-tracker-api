@@ -11,9 +11,8 @@ router=APIRouter(
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.UserOut)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+    print("Received user data:", user.dict())
     try:
-        print("Received user data:", user.dict())
-
         existing_user = db.query(models.User).filter(models.User.email == user.email).first()
         if existing_user:
             raise HTTPException(
@@ -32,13 +31,13 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
         print("New user created successfully:", new_user.email)
         return new_user
 
-    except HTTPException as he:
-        raise he
     except Exception as e:
-        print("Error in /users/ route:", str(e))
+        import traceback
+        print(" Error in /users/ route:", str(e))
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail="Internal Server Error")
-    
-    
+
+
 @router.get("/",response_model=list[schemas.UserOut])
 def get_all_users(db: Session = Depends(get_db),
                   current_user: models.User = Depends(auth.get_current_user)):
