@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from app.database import engine
 from app import models
 from app.models import Base
+from app.routes import dev_routes 
 from app.routes import auth,expense_routes,user_routes,group_routes,run_migrations
 
 #Base.metadata.create_all(bind=engine)
@@ -12,6 +13,8 @@ app.include_router(expense_routes.router)
 app.include_router(user_routes.router)
 app.include_router(group_routes.router)
 app.include_router(run_migrations.router)
+app.include_router(dev_routes.router)
+
 
 @app.get("/")
 def root():
