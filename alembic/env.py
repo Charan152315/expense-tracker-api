@@ -1,12 +1,11 @@
 from logging.config import fileConfig
 import os
 import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..','app')))
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from app.models import Base 
 from app import models 
-from app.database import engine  
 from app.config import settings
 from alembic import context
 
